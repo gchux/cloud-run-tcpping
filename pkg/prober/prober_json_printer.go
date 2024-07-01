@@ -33,7 +33,7 @@ func (p *jsonProbePrinter) newJSON(task *proberTask) *gabs.Container {
 
 func (p *jsonProbePrinter) printProbe(task *proberTask,
 	attempt *uint64, target *netip.AddrPort,
-	latency *time.Duration, rtt *float64, err error,
+	latency *time.Duration, err error,
 ) {
 	json := p.newJSON(task)
 
@@ -42,12 +42,17 @@ func (p *jsonProbePrinter) printProbe(task *proberTask,
 		json.Set(err.Error(), "error")
 	}
 
-	message := stringFormatter.Format("#:{0} | @:{1}/{2} | latency:{3}",
-		*attempt, task.URL.Host, target.String(), *latency)
-
 	json.Set(*attempt, "serial")
 	json.Set(target.String(), "target")
-	json.Set(*rtt, "latency")
+	json.Set(task.Stats.LastLatency, "latency")
+	json.Set(task.Stats.DeltaLatency, "delta")
+
+	var message string
+	if task.Type == RAW_IPv4 || task.Type == RAW_IPv6 {
+		message = stringFormatter.Format("#:{0} | @:{1} | latency:{3}", *attempt, target.String(), *latency)
+	} else {
+		message = stringFormatter.Format("#:{0} | @:{1}/{2} | latency:{3}", *attempt, task.URL.Hostname(), target.String(), *latency)
+	}
 	json.Set(message, "message")
 
 	fmt.Println(json.String())
@@ -59,10 +64,10 @@ func (p *jsonProbePrinter) printStats(task *proberTask, probesCount *logSizeType
 	stats := task.Stats
 
 	json.Set(stats.TotalProbes, "count", "total")
-	json.Set(stats.TotalSuccessful, "count", "success")
-	json.Set(stats.TotalFailures, "count", "failures")
-	json.Set(stats.ConsecutiveSuccesful, "count", "consecutive", "success")
-	json.Set(stats.ConsecutiveFailures, "count", "consecutive", "failures")
+	json.Set(stats.TotalSuccessful, "count", "ok")
+	json.Set(stats.TotalFailures, "count", "ko")
+	json.Set(stats.ConsecutiveSuccesful, "count", "consecutive", "ok")
+	json.Set(stats.ConsecutiveFailures, "count", "consecutive", "ko")
 
 	json.Set(stats.OverallMinLatency, "latency", "overall", "min")
 	json.Set(stats.MinLatency, "latency", "min")
@@ -73,8 +78,8 @@ func (p *jsonProbePrinter) printStats(task *proberTask, probesCount *logSizeType
 	json.Set(stats.StandardDeviation, "latency", "sigma")
 	json.Set(stats.Skewness, "latency", "skew")
 
-	message := stringFormatter.Format("[last {0}]: min/max/avg/sigma/skew={1}/{2}/{3}/{4}/{5} | [total: {6}]: min/max={7}/{8}",
-		*probesCount,
+	message := stringFormatter.Format("{0} | [last {1}]: min/max/avg/sigma/skew={2}/{3}/{4}/{5}/{6} | [total: {7}]: min/max={8}/{9}",
+		task.URL.Host, *probesCount,
 		stats.MinLatency, stats.MaxLatency,
 		stats.AverageLatency, stats.StandardDeviation, stats.Skewness,
 		stats.TotalProbes, stats.OverallMinLatency, stats.OverallMaxLatency)

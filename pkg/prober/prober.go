@@ -34,6 +34,8 @@ type (
 		TotalFailures        uint64
 		ConsecutiveSuccesful uint64
 		ConsecutiveFailures  uint64
+		LastLatency          float64
+		DeltaLatency         float64
 		OverallMinLatency    float64
 		OverallMaxLatency    float64
 		MinLatency           float64
@@ -59,7 +61,7 @@ type (
 	}
 
 	probePrinter interface {
-		printProbe(*proberTask, *uint64, *netip.AddrPort, *time.Duration, *float64, error)
+		printProbe(*proberTask, *uint64, *netip.AddrPort, *time.Duration, error)
 		printStats(*proberTask, *logSizeType)
 		printDNSUpdate(*proberTask, *time.Duration, *netip.Addr, bool, error)
 	}
@@ -105,15 +107,14 @@ func (pt *proberTask) printStats() {
 	params := pt.Params
 	stats := pt.Stats
 
-	var count logSizeType = 0
-	var totalLatency float64 = 0.0
-
 	size := params.LogSize
 	if stats.TotalProbes <= uint64(size) {
 		size = uint16(stats.TotalProbes)
 	}
 	latencies := make([]float64, size)
 
+	var count logSizeType = 0
+	var totalLatency float64 = 0.0
 	pt.Latencies.Do(func(rtt any) {
 		if rtt == nil {
 			return
@@ -250,6 +251,11 @@ func (pt *proberTask) afterProbing(ctx context.Context,
 
 	stats := pt.Stats
 
+	// update last observed latency with current observation
+	stats.DeltaLatency = stats.LastLatency - rtt
+	stats.LastLatency = rtt
+
+	// update total number of probes performed
 	stats.TotalProbes = att
 
 	// upodate overall min/max latencies
@@ -260,8 +266,6 @@ func (pt *proberTask) afterProbing(ctx context.Context,
 		stats.OverallMinLatency = rtt
 	}
 
-	(*pt.Printer).printProbe(pt, attempt, target, latency, &rtt, err)
-
 	if err != nil {
 		stats.TotalFailures += 1
 		stats.ConsecutiveFailures += 1
@@ -271,6 +275,8 @@ func (pt *proberTask) afterProbing(ctx context.Context,
 		stats.ConsecutiveSuccesful += 1
 		stats.ConsecutiveFailures = 0
 	}
+
+	(*pt.Printer).printProbe(pt, attempt, target, latency, err)
 }
 
 func (pt *proberTask) interval() *time.Duration {
@@ -317,9 +323,12 @@ func NewProberFromRawURL(rawTaskURL *string) (prober *Prober, err error) {
 
 	taskParams := newProberTaskParams(taskURL)
 
-	taskStats := &proberTaskStats{0, 0, 0, 0, 0, math.MaxFloat64, 0.0, math.MaxFloat64, 0.0, 0.0, 0.0, 0.0}
+	taskStats := &proberTaskStats{
+		0, 0, 0, 0, 0, 0.0, 0.0, math.MaxFloat64, 0.0, math.MaxFloat64, 0.0, 0.0, 0.0, 0.0,
+	}
 
-	// between 255 and 500 for low cpu/memory apps
+	// max number of observations to keep for statistics
+	// |_ between 255 and 500 for low cpu/memory apps
 	latencies := ring.New(int(taskParams.LogSize))
 
 	taskProbePrinter := newPrinter(&taskParams.OutputFormat)
