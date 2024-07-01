@@ -21,7 +21,7 @@ const (
 	invalidTaskURLTemplate = "invalid task URL: %s"
 )
 
-func startProbeing(ctx context.Context, wg *sync.WaitGroup, pp *prober.Prober) {
+func startProbing(ctx context.Context, wg *sync.WaitGroup, pp *prober.Prober) {
 	p := *pp
 	start := time.Now()
 	count := prober.Probe(ctx, pp)
@@ -65,7 +65,7 @@ func main() {
 	var wg sync.WaitGroup
 	for _, task := range probers {
 		wg.Add(1)
-		go startProbeing(ctx, &wg, task)
+		go startProbing(ctx, &wg, task)
 	}
 
 	<-ctx.Done()
