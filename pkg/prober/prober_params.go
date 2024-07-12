@@ -19,13 +19,17 @@ type (
 )
 
 const (
-	PARAM_INTERVAL       = "probe_interval" // how often to probe ( seconds )
-	PARAM_TIMEOUT        = "probe_timeout"  // how long probes should wait before failing ( Milliseconds )
-	PARAM_USE_TLS        = "use_tls"        // probe using TLS
-	PARAM_DNS_INTERVAL   = "dns_interval"   // after how many probes FQDNs should be re-resolved ( only applied for `dns+...` )
-	PARAM_LOG_SIZE       = "log_size"       // how many probes details to keep for stats
-	PARAM_STATS_INTERVAL = "stats_interval" // after how many probes stats should be printed
-	PARAM_OUTPUT_FORMAT  = "output_fornat"  // how to print probes
+	PARAM_INTERVAL         = "probe_interval" // how often to probe ( seconds )
+	PARAM_TIMEOUT          = "probe_timeout"  // how long probes should wait before failing ( Milliseconds )
+	PARAM_USE_TLS          = "use_tls"        // probe using TLS
+	PARAM_DNS_INTERVAL     = "dns_interval"   // after how many probes FQDNs should be re-resolved ( only applied for `dns+...` )
+	PARAM_LOG_SIZE         = "log_size"       // how many probes details to keep for stats
+	PARAM_STATS_INTERVAL   = "stats_interval" // after how many probes stats should be printed
+	PARAM_OUTPUT_FORMAT    = "output_format"  // how to print probes
+	PARAM_LOGZ_DIR         = "logz_dir"
+	PARAM_LOGZ_NAME        = "logz_name"
+	PARAM_LOGZ_ROTATE_SECS = "logz_rotate_secs"
+	PARAM_LOGZ_SYNC        = "logz_sync"
 )
 
 const (

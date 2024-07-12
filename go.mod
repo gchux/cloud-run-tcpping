@@ -4,6 +4,7 @@ go 1.22.4
 
 require (
 	github.com/Jeffail/gabs/v2 v2.7.0
+	github.com/easyCZ/logrotate v0.3.0
 	github.com/go-toolbelt/jitter v0.1.1
 	github.com/lainio/err2 v1.0.0
 	github.com/pkg/errors v0.9.1

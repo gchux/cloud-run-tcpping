@@ -4,10 +4,12 @@ import (
 	"container/ring"
 	"context"
 	"errors"
+	"log"
 	"math"
 	"net"
 	"net/netip"
 	"net/url"
+	"os"
 	"sync/atomic"
 	"time"
 
@@ -102,6 +104,8 @@ var (
 	errorUnknownHostname      = errorx.New("unknown hostname")
 	errorDNSUpdateNotRequired = errorx.New("DNS refresh is not required")
 )
+
+var logrotateLogger = log.New(os.Stderr, "logrotate", log.LstdFlags)
 
 func (pt *proberTask) printStats() {
 	params := pt.Params
@@ -331,7 +335,7 @@ func NewProberFromRawURL(rawTaskURL *string) (prober *Prober, err error) {
 	// |_ between 255 and 500 for low cpu/memory apps
 	latencies := ring.New(int(taskParams.LogSize))
 
-	taskProbePrinter := newPrinter(&taskParams.OutputFormat)
+	taskProbePrinter := newPrinter(taskURL, &taskParams.OutputFormat)
 
 	task := &proberTask{
 		Raw:       *rawTaskURL,

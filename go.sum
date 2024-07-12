@@ -2,6 +2,8 @@ github.com/Jeffail/gabs/v2 v2.7.0 h1:Y2edYaTcE8ZpRsR2AtmPu5xQdFDIthFG0jYhu5PY8kg
 github.com/Jeffail/gabs/v2 v2.7.0/go.mod h1:dp5ocw1FvBBQYssgHsG7I1WYsiLRtkUaB1FEtSwvNUw=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/easyCZ/logrotate v0.3.0 h1:IYihLY2NKKPu9LjZWgxZATAKpzz5KLXSAuqJgDy++XU=
+github.com/easyCZ/logrotate v0.3.0/go.mod h1:noWLLQ0I45CRGXb9bGYuOcZXFE74fdgCldGPqz8txpU=
 github.com/go-toolbelt/jitter v0.1.1 h1:GzOPnEkTFtta5LDf0c4M/xqpsI5K2aUMDwxsQWS8Bp8=
 github.com/go-toolbelt/jitter v0.1.1/go.mod h1:rTNxvL7jxlRMyTAanfKChlqCEA2xG4fGbv+CmSSqNIw=
 github.com/lainio/err2 v1.0.0 h1:ndyaIeh4TSryI7sJRc9O6frgEnIUyGJ8R/9FE+kdaKg=
@@ -12,8 +14,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rs/xid v1.5.0 h1:mKX4bl4iPYJtEIxp6CYiUuLQ/8DYMoz0PUdtGgMFRVc=
 github.com/rs/xid v1.5.0/go.mod h1:trrq9SKmegXys3aeAKXMUTdJsYXVwGY3RLcfgqegfbg=
-github.com/stretchr/testify v1.8.0 h1:pSgiaMZlXftHpm5L7V1+rVB+AZJydKsMxsQBIJw4PKk=
-github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
+github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
+github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/wissance/stringFormatter v1.2.0 h1:lB0zcJkTA1O4Eb2qSTJmyapla/LihQt6NpJLghwWSb0=
 github.com/wissance/stringFormatter v1.2.0/go.mod h1:H7Mz15+5i8ypmv6bLknM/uD+U1teUW99PlW0DNCNscA=
 golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa h1:FRnLl4eNAQl8hwxVVC17teOw8kdjVDVAiFMtgUdTSRQ=

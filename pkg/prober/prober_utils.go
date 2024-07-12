@@ -21,15 +21,15 @@ func asMillis(latency *time.Duration) float64 {
 	return float64(latency.Nanoseconds()) / float64(time.Millisecond)
 }
 
-func newPrinter(format *string) probePrinter {
+func newPrinter(taskURL *url.URL, format *string) probePrinter {
 	guid := xid.New().String()
 	logName := stringFormatter.Format("projects/{0}/tcpping/{1}", os.Getenv("PROJECT_ID"), guid)
 
 	switch *format {
 	default:
-		return newJSONProbePrinter(guid, logName)
+		return newJSONProbePrinter(guid, logName, taskURL)
 	case "json":
-		return newJSONProbePrinter(guid, logName)
+		return newJSONProbePrinter(guid, logName, taskURL)
 	}
 }
 
